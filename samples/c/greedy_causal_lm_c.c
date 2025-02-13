@@ -3,13 +3,13 @@
 #include <stdlib.h>
 
 int main(int argc, char* argv[]) {
-    //if (argc < 3) {
-    //    fprintf(stderr, "Usage: %s <MODEL_DIR> \"<PROMPT>\"\n", argv[0]);
-    //    return EXIT_FAILURE;
-    //}
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s <MODEL_DIR> \"<PROMPT>\"\n", argv[0]);
+        return EXIT_FAILURE;
+    }
     printf("This is C API for OpenVINO GenAI\n");
-    const char* model_dir = "C:\\Users\\gta\\source\\repos\\tiny-llama-1.1b-chat_OV_FP16-INT8_ASYM";
-    const char* prompt = "How many r letters are there in the word strawberry?";
+    const char* model_dir = argv[1];
+    const char* prompt = argv[2];
 
     LLMPipelineHandle pipeline = CreateLLMPipeline(model_dir, "CPU");
     if (pipeline == NULL) {
