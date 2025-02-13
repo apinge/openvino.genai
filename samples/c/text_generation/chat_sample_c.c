@@ -1,4 +1,4 @@
-#include "openvino/genai/genai_c_api.hpp"
+#include "openvino/genai/genai_c_api.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,7 +12,7 @@ void streamer(const char* word) {
 int main(int argc, char* argv[]) {
     printf("This is a C API example for OpenVINO GenAI.\n");
     if (argc !=2 ) {
-        fprintf(stderr, "Usage: %s <MODEL_DIR> \"<PROMPT>\"\n", argv[0]);
+        fprintf(stderr, "Usage: %s <MODEL_DIR>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -24,7 +24,6 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Failed to create LLM pipeline\n");
         return EXIT_FAILURE;
     }
-    // int max_new_tokens = 100;
 
     LLMPipelineStartChat(pipeline);
     printf("question:\n");

@@ -1,5 +1,5 @@
 #include "openvino/genai/llm_pipeline.hpp"
-#include "openvino/genai/genai_c_api.hpp"
+#include "openvino/genai/genai_c_api.h"
 
 extern "C" {
 
@@ -26,4 +26,16 @@ extern "C" {
 
         }
     }
-}  // extern "C"
+    void LLMPipelineStartChat(LLMPipelineHandle handle) {
+        if (handle) {
+            ov::genai::LLMPipeline* pipeline = static_cast<ov::genai::LLMPipeline*>(handle);
+            pipeline->start_chat();
+        }
+     }
+    void LLMPipelineFinishCaht(LLMPipelineHandle handle){
+          if (handle) {
+                ov::genai::LLMPipeline* pipeline = static_cast<ov::genai::LLMPipeline*>(handle);
+                pipeline->finish_chat();
+          }
+        }
+    }  // extern "C"
