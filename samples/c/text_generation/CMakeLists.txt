@@ -20,10 +20,17 @@ function(add_sample_executable target_name)
     #         RUNTIME DESTINATION samples_bin/
     #         COMPONENT samples_bin
     #         EXCLUDE_FROM_ALL)
+    # Specifies that the source file should be compiled as a C source file
+    if(WIN32)
+        target_compile_options(${target_name} PRIVATE /TC)
+    elseif(UNIX)
+        target_compile_options(${target_name} PRIVATE -x c)
+    endif()
 endfunction()
 
 set (SAMPLE_LIST
-    greedy_causal_lm_c)
+    greedy_causal_lm_c
+    chat_sample_c)
 
 foreach(sample ${SAMPLE_LIST})
     add_sample_executable(${sample})

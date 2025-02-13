@@ -6,7 +6,7 @@ add_subdirectory(cpp/text_generation)
 add_subdirectory(cpp/image_generation)
 add_subdirectory(cpp/visual_language_chat)
 add_subdirectory(cpp/whisper_speech_recognition)
-add_subdirectory(c)
+add_subdirectory(c/text_generation)
 install(FILES
         deployment-requirements.txt
         export-requirements.txt

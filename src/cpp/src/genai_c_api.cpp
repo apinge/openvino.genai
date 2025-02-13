@@ -1,6 +1,5 @@
-#include "llm_pipeline.hpp"
-#include "genai_c_api.hpp"
-
+#include "openvino/genai/llm_pipeline.hpp"
+#include "openvino/genai/genai_c_api.hpp"
 
 extern "C" {
 
@@ -27,4 +26,4 @@ extern "C" {
 
         }
     }
-    }  // extern "C"
+}  // extern "C"

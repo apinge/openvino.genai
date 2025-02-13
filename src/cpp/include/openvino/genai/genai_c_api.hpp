@@ -15,6 +15,8 @@ OPENVINO_GENAI_EXPORTS void LLMPipelineGenerate(LLMPipelineHandle handle,
                                                const char* inputs,
                                                char* output,
                                                int max_size);
+OPENVINO_GENAI_EXPORTS void LLMPipelineStartChat(LLMPipelineHandle handle);
+OPENVINO_GENAI_EXPORTS void LLMPipelineFinishCaht(LLMPipelineHandle handle);
 
 #ifdef __cplusplus
  }

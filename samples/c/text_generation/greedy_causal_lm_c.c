@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 int main(int argc, char* argv[]) {
+    printf("This is a C API example for OpenVINO GenAI.\n");
     if (argc < 3) {
         fprintf(stderr, "Usage: %s <MODEL_DIR> \"<PROMPT>\"\n", argv[0]);
         return EXIT_FAILURE;
     }
-    printf("This is C API for OpenVINO GenAI\n");
     const char* model_dir = argv[1];
     const char* prompt = argv[2];
 
