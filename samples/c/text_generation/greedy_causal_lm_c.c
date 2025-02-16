@@ -1,4 +1,4 @@
-#include "openvino/genai/genai_c_api.h"
+#include "openvino/genai/openvino_genai_c.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,21 +1,27 @@
-#ifndef GENAI_C_API_H
-#define GENAI_C_API_H
+// Copyright (C) 2018-2024 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
+//
+
+/**
+ * @brief This is a header file for OpenVINO GenAI C API, which is a C wrapper for  ov::genai::GenerationConfig class.
+ *
+ * @file generation_config_c.h
+ */
+
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "visibility.hpp"
+#include "../visibility.hpp"
 
 
 #ifdef __cplusplus
 OPENVINO_EXTERN_C {
 #endif
 
-typedef enum {
-    EARLY,
-    HEURISTIC,
-    NEVER
-} StopCriteria;
-//ov::genai::GenerationConfig
+
+typedef enum { EARLY, HEURISTIC, NEVER } StopCriteria;
+// ov::genai::GenerationConfig
 typedef void* GenerationConfigHandle;
 OPENVINO_GENAI_EXPORTS GenerationConfigHandle CreateGenerationConfig();
 OPENVINO_GENAI_EXPORTS GenerationConfigHandle CreateGenerationConfigFromJson(const char* json_path);
@@ -30,9 +36,12 @@ OPENVINO_GENAI_EXPORTS void GenerationConfig_SetEcho(GenerationConfigHandle hand
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetLogProbs(GenerationConfigHandle handle, size_t value);
 
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetStopStrings(GenerationConfigHandle handle,
-                                                            const char* strings[] ,size_t count);
+                                                            const char* strings[],
+                                                            size_t count);
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetIncludeStopStrInOutput(GenerationConfigHandle handle, bool value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetStopTokenIds(GenerationConfigHandle handle, int64_t* token_ids, size_t token_ids_num);
+OPENVINO_GENAI_EXPORTS void GenerationConfig_SetStopTokenIds(GenerationConfigHandle handle,
+                                                             int64_t* token_ids,
+                                                             size_t token_ids_num);
 
 // Beam Search
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumBeamGroups(GenerationConfigHandle handle, size_t value);
@@ -52,7 +61,6 @@ OPENVINO_GENAI_EXPORTS void GenerationConfig_SetPresencePenalty(GenerationConfig
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetFrequencyPenalty(GenerationConfigHandle handle, float value);
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetRngSeed(GenerationConfigHandle handle, size_t value);
 
-
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetAssistantConfidenceThreshold(GenerationConfigHandle handle,
                                                                              float value);
 OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumAssistantTokens(GenerationConfigHandle handle, size_t value);
@@ -68,22 +76,6 @@ OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsAssistingGeneration(GenerationCon
 OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsPromptLookup(GenerationConfigHandle handle);
 OPENVINO_GENAI_EXPORTS void GenerationConfig_Validate(GenerationConfigHandle handle);
 
-
-
-// ov::genai::LLMPipeline
-typedef void* LLMPipelineHandle;
-OPENVINO_GENAI_EXPORTS LLMPipelineHandle CreateLLMPipeline(const char* models_path, const char* device);
-OPENVINO_GENAI_EXPORTS void LLMPipelineDestroy(LLMPipelineHandle handle);
-OPENVINO_GENAI_EXPORTS void LLMPipelineGenerate(LLMPipelineHandle handle,
-                                                const char* inputs,
-                                                char* output,
-                                                int max_size,
-                                                GenerationConfigHandle config);
-OPENVINO_GENAI_EXPORTS void LLMPipelineStartChat(LLMPipelineHandle handle);
-OPENVINO_GENAI_EXPORTS void LLMPipelineFinishCaht(LLMPipelineHandle handle);
-
 #ifdef __cplusplus
- }
+}
 #endif
-
-#endif // GENAI_C_API_H
