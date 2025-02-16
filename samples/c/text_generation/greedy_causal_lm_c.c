@@ -16,9 +16,11 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Failed to create LLM pipeline\n");
         return EXIT_FAILURE;
     }
-
+    GenerationConfigHandle config = CreateGenerationConfig();
+    GenerationConfig_SetMaxNewTokens(config, 100);
+    //printf("get max new tokens %llu\n",GenerationConfig_GetMaxNewTokens(config));
     char output[1024];
-    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output));
+    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output), config);
 
     printf("Generated text: %s\n", output);
 

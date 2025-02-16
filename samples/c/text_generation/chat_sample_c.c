@@ -25,12 +25,16 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    GenerationConfigHandle config = CreateGenerationConfig();
+    GenerationConfig_SetMaxNewTokens(config, 100);
+    //printf("get max new tokens %llu\n", GenerationConfig_GetMaxNewTokens(config));
+
     LLMPipelineStartChat(pipeline);
     printf("question:\n");
     while (fgets(prompt, MAX_PROMPT_LENGTH, stdin)) {
         prompt[strcspn(prompt, "\n")] = 0;
 
-        LLMPipelineGenerate(pipeline, prompt, output, sizeof(output));
+        LLMPipelineGenerate(pipeline, prompt, output, sizeof(output),config);
         streamer(output);
 
         printf("\n----------\nquestion:\n");

@@ -10,27 +10,23 @@ find_package(OpenVINOGenAI REQUIRED
 
 function(add_sample_executable target_name)
     add_executable(${target_name} ${target_name}.c)
+    # Specifies that the source file should be compiled as a C source file
     set_source_files_properties(${target_name}.c PROPERTIES LANGUAGE C)
     target_link_libraries(${target_name} PRIVATE openvino::genai)
     # set_target_properties(${target_name} PROPERTIES
-    #     COMPILE_PDB_NAME ${target_name}
-    #     # Ensure out-of-box LC_RPATH on macOS with SIP
-    #     INSTALL_RPATH_USE_LINK_PATH ON)
-    # install(TARGETS ${target_name}
-    #         RUNTIME DESTINATION samples_bin/
-    #         COMPONENT samples_bin
-    #         EXCLUDE_FROM_ALL)
-    # Specifies that the source file should be compiled as a C source file
-    if(WIN32)
-        target_compile_options(${target_name} PRIVATE /TC)
-    elseif(UNIX)
-        target_compile_options(${target_name} PRIVATE -x c)
-    endif()
+    #      COMPILE_PDB_NAME ${target_name}
+    #      # Ensure out-of-box LC_RPATH on macOS with SIP
+    #      INSTALL_RPATH_USE_LINK_PATH ON)
+    #  install(TARGETS ${target_name}
+    #          RUNTIME DESTINATION samples_bin/
+    #          COMPONENT samples_bin
+    #          EXCLUDE_FROM_ALL)
 endfunction()
 
 set (SAMPLE_LIST
     greedy_causal_lm_c
-    chat_sample_c)
+    chat_sample_c
+    benchmark_genai_c)
 
 foreach(sample ${SAMPLE_LIST})
     add_sample_executable(${sample})
@@ -38,7 +34,7 @@ endforeach()
 
 
 # benchmark_genai
-include(FetchContent)
+#include(FetchContent)
 
 if(POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
@@ -49,15 +45,13 @@ endif()
 #     URL_HASH SHA256=523175f792eb0ff04f9e653c90746c12655f10cb70f1d5e6d6d9491420298a08)
 # FetchContent_MakeAvailable(cxxopts)
 
-# add_executable(greedy_causal_lm_c greedy_causal_lm.c)
-# #target_link_libraries(greedy_causal_lm_c PRIVATE openvino::genai cxxopts::cxxopts)
-# target_link_libraries(greedy_causal_lm_c PRIVATE openvino::genai)
-# set_target_properties(greedy_causal_lm_c PROPERTIES
-#     COMPILE_PDB_NAME greedy_causal_lm_c
+# add_executable(benchmark_genai benchmark_genai.cpp)
+# set_target_properties(benchmark_genai PROPERTIES
+#     COMPILE_PDB_NAME benchmark_genai
 #     # Ensure out of box LC_RPATH on macOS with SIP
 #     INSTALL_RPATH_USE_LINK_PATH ON)
 
-# install(TARGETS greedy_causal_lm_c
+# install(TARGETS benchmark_genai
 #         RUNTIME DESTINATION samples_bin/
 #         COMPONENT samples_bin
 #         EXCLUDE_FROM_ALL)
