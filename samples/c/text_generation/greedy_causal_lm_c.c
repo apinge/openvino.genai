@@ -1,6 +1,7 @@
-#include "openvino/genai/openvino_genai_c.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "openvino/genai/openvino_genai_c.h"
 
 int main(int argc, char* argv[]) {
     printf("This is a C API example for OpenVINO GenAI.\n");
@@ -20,7 +21,7 @@ int main(int argc, char* argv[]) {
     GenerationConfigSetMaxNewTokens(config, 100);
 
     char output[1024];
-    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output),config);
+    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output), config);
 
     printf("Generated text: %s\n", output);
 

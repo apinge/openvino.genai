@@ -1,9 +1,10 @@
 // Copyright (C) 2023-2024 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
-#include "openvino/genai/openvino_genai_c.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "openvino/genai/openvino_genai_c.h"
 
 #define MAX_PROMPT_LENGTH 256
 #define MAX_OUTPUT_LENGTH 2048
@@ -14,7 +15,7 @@ void streamer(const char* word) {
 }
 int main(int argc, char* argv[]) {
     printf("This is a C API example for OpenVINO GenAI.\n");
-    if (argc !=2 ) {
+    if (argc != 2) {
         fprintf(stderr, "Usage: %s <MODEL_DIR>\n", argv[0]);
         return EXIT_FAILURE;
     }

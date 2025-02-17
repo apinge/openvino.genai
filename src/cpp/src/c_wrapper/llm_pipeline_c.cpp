@@ -1,7 +1,9 @@
 // Copyright (C) 2018-2024 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 //
+
 #include "openvino/genai/c_wrapper/llm_pipeline_c.h"
+
 #include "common_c.hpp"
 #include "openvino/genai/c_wrapper/generation_config_c.h"
 #include "openvino/genai/generation_config.hpp"
@@ -15,12 +17,12 @@ OPENVINO_EXTERN_C {
         results->object = std::make_shared<ov::genai::DecodedResults>();
         return results;
     }
-    void DestroyDecodedResults(DecodedResultsHandle* results) {
+    void DestroyDecodedResults(DecodedResultsHandle * results) {
         if (results) {
             delete results;
         }
     }
-    void DecodedeResultsGetPerfMetrics(DecodedResultsHandle * results, PerfMetricsHandle* metrics) {
+    void DecodedeResultsGetPerfMetrics(DecodedResultsHandle * results, PerfMetricsHandle * metrics) {
         if (results && metrics) {
             metrics->object = std::make_shared<ov::genai::PerfMetrics>(results->object->perf_metrics);
         }
@@ -56,10 +58,10 @@ OPENVINO_EXTERN_C {
             output[max_size - 1] = '\0';
         }
     }
-    void LLMPipelineGenerateDecodeResults(LLMPipelineHandle* pipe,
-                                     const char* inputs,
-                                     DecodedResultsHandle* results,
-                                     GenerationConfigHandle* config) {
+    void LLMPipelineGenerateDecodeResults(LLMPipelineHandle * pipe,
+                                          const char* inputs,
+                                          DecodedResultsHandle* results,
+                                          GenerationConfigHandle* config) {
         if (pipe) {
             std::string input_str(inputs);
             ov::genai::StringInputs input = {input_str};

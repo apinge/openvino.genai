@@ -102,9 +102,9 @@ int main(int argc, char* argv[]) {
 
     int result = parse_arguments(argc, argv, &options);
     if (result == 0) {
-        return EXIT_SUCCESS; 
+        return EXIT_SUCCESS;
     } else if (result == -1) {
-        return EXIT_FAILURE;  
+        return EXIT_FAILURE;
     }
 
     printf("Model: %s\n", options.model ? options.model : "Not specified");
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
 
     LLMPipelineGenerate(pipe, options.prompt, output, MAX_OUTPUT_LENGTH, config);
 
-    DecodedResultsHandle* results =CreateDecodedResults();
+    DecodedResultsHandle* results = CreateDecodedResults();
     LLMPipelineGenerateDecodeResults(pipe, options.prompt, results, config);
 
     PerfMetricsHandle* metrics = CreatePerfMetrics();
@@ -137,16 +137,24 @@ int main(int argc, char* argv[]) {
         PerfMetricsHandle* _metrics = CreatePerfMetrics();
         DecodedeResultsGetPerfMetrics(results, _metrics);
         AddPerfMetricsInPlace(metrics, _metrics);
-        DestoryPerfMetics(_metrics); 
+        DestoryPerfMetics(_metrics);
     }
 
     printf("%.2f ms\n", PerfMetricsGetLoadTime(metrics));
-    printf("Generate time: %.2f ± %.2f ms\n",PerfMetricsGetGenerateDuration(metrics).mean, PerfMetricsGetGenerateDuration(metrics).std);
-    printf("Tokenization time: %.2f ± %.2f ms\n",PerfMetricsGetTokenizationDuration(metrics).mean,PerfMetricsGetTokenizationDuration(metrics).std);
-    printf("Detokenization time: %.2f ± %.2f ms\n",PerfMetricsGetDetokenizationDuration(metrics).mean,PerfMetricsGetDetokenizationDuration(metrics).std);
+    printf("Generate time: %.2f ± %.2f ms\n",
+           PerfMetricsGetGenerateDuration(metrics).mean,
+           PerfMetricsGetGenerateDuration(metrics).std);
+    printf("Tokenization time: %.2f ± %.2f ms\n",
+           PerfMetricsGetTokenizationDuration(metrics).mean,
+           PerfMetricsGetTokenizationDuration(metrics).std);
+    printf("Detokenization time: %.2f ± %.2f ms\n",
+           PerfMetricsGetDetokenizationDuration(metrics).mean,
+           PerfMetricsGetDetokenizationDuration(metrics).std);
     printf("TTFT: %.2f ± %.2f ms\n", PerfMetricsGetTtft(metrics).mean, PerfMetricsGetTtft(metrics).std);
     printf("TPOT: %.2f ± %.2f ms/token\n", PerfMetricsGetTpot(metrics).mean, PerfMetricsGetTpot(metrics).std);
-    printf("Throughput: %.2f ± %.2f tokens/s\n",PerfMetricsGetThroughput(metrics).mean,PerfMetricsGetThroughput(metrics).std);
+    printf("Throughput: %.2f ± %.2f tokens/s\n",
+           PerfMetricsGetThroughput(metrics).mean,
+           PerfMetricsGetThroughput(metrics).std);
 
     // Release Resources
     DestroyLLMPipeline(pipe);

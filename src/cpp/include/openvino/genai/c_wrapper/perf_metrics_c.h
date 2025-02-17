@@ -8,39 +8,38 @@
  * @file perf_metrics_c.h
  */
 #pragma once
-#include <stdint.h> 
 #include <stddef.h>
+#include <stdint.h>
+
 #include "../visibility.hpp"
 #ifdef __cplusplus
 OPENVINO_EXTERN_C {
 #endif
 
-typedef struct {
+    typedef struct {
         float mean;
         float std;
-} MeanStdPair_C;
+    } MeanStdPair_C;
 
-typedef struct PerfMetricsOpaque PerfMetricsHandle;
+    typedef struct PerfMetricsOpaque PerfMetricsHandle;
 
-OPENVINO_GENAI_EXPORTS PerfMetricsHandle* CreatePerfMetrics();
-OPENVINO_GENAI_EXPORTS void DestoryPerfMetics(PerfMetricsHandle * metrics);
+    OPENVINO_GENAI_EXPORTS PerfMetricsHandle* CreatePerfMetrics();
+    OPENVINO_GENAI_EXPORTS void DestoryPerfMetics(PerfMetricsHandle * metrics);
 
-OPENVINO_GENAI_EXPORTS float PerfMetricsGetLoadTime(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS size_t PerfMetricsGetNumGeneratedTokens(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS size_t PerfMetricsGetNumInputTokens(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTtft(const PerfMetricsHandle* metrics);                               
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTpot(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetIpot(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetThroughput(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetInferenceDuration(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetGenerateDuration(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTokenizationDuration(const PerfMetricsHandle* metrics);
-OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetDetokenizationDuration(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS float PerfMetricsGetLoadTime(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS size_t PerfMetricsGetNumGeneratedTokens(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS size_t PerfMetricsGetNumInputTokens(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTtft(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTpot(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetIpot(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetThroughput(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetInferenceDuration(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetGenerateDuration(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTokenizationDuration(const PerfMetricsHandle* metrics);
+    OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetDetokenizationDuration(const PerfMetricsHandle* metrics);
 
-// PerfMetrics operator+(const PerfMetrics& metrics) const;
-OPENVINO_GENAI_EXPORTS PerfMetricsHandle* AddPerfMetrics(const PerfMetricsHandle* left, const PerfMetricsHandle* right);
-//PerfMetrics& operator+=(const PerfMetrics& right);
-OPENVINO_GENAI_EXPORTS void AddPerfMetricsInPlace(PerfMetricsHandle * left, const PerfMetricsHandle* right);
+    // PerfMetrics& operator+=(const PerfMetrics& right);
+    OPENVINO_GENAI_EXPORTS void AddPerfMetricsInPlace(PerfMetricsHandle * left, const PerfMetricsHandle* right);
 
 #ifdef __cplusplus
 }
