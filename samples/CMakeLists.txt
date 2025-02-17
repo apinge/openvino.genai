@@ -20,7 +20,7 @@ install(DIRECTORY
             cpp/visual_language_chat
             cpp/whisper_speech_recognition
         DESTINATION samples/cpp COMPONENT cpp_samples_genai)
-
+ 
 install(DIRECTORY
             python/text_generation
             python/image_generation
@@ -28,3 +28,7 @@ install(DIRECTORY
             python/whisper_speech_recognition
         DESTINATION samples/python COMPONENT cpp_samples_genai
         USE_SOURCE_PERMISSIONS)
+
+install(DIRECTORY
+        c/text_generation
+        DESTINATION samples/c COMPONENT cpp_samples_genai)

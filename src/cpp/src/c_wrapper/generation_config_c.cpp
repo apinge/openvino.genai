@@ -1,3 +1,6 @@
+// Copyright (C) 2024 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
+
 #include "openvino/genai/c_wrapper/generation_config_c.h"
 
 #include "common_c.hpp"

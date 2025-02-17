@@ -1,12 +1,5 @@
 // Copyright (C) 2018-2024 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
-//
-
-/**
- * @brief This is a header file for OpenVINO GenAI C API
- *
- * @file common_c.hpp
- */
 
 #pragma once
 #include "openvino/genai/generation_config.hpp"

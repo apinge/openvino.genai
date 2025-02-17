@@ -1,6 +1,6 @@
 // Copyright (C) 2018-2024 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
-//
+
 #include "openvino/genai/c_wrapper/perf_metrics_c.h"
 
 #include <stdbool.h>
