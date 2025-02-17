@@ -9,6 +9,7 @@
  */
 #pragma once
 #include <stdint.h> 
+#include <stddef.h>
 #include "../visibility.hpp"
 #ifdef __cplusplus
 OPENVINO_EXTERN_C {
