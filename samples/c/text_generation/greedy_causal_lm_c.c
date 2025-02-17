@@ -11,21 +11,21 @@ int main(int argc, char* argv[]) {
     const char* model_dir = argv[1];
     const char* prompt = argv[2];
 
-    LLMPipelineHandle pipeline = CreateLLMPipeline(model_dir, "CPU");
+    LLMPipelineHandle* pipeline = CreateLLMPipeline(model_dir, "CPU");
     if (pipeline == NULL) {
         fprintf(stderr, "Failed to create LLM pipeline\n");
         return EXIT_FAILURE;
     }
-    GenerationConfigHandle config = CreateGenerationConfig();
-    GenerationConfig_SetMaxNewTokens(config, 100);
-    //printf("get max new tokens %llu\n",GenerationConfig_GetMaxNewTokens(config));
+    GenerationConfigHandle* config = CreateGenerationConfig();
+    GenerationConfigSetMaxNewTokens(config, 100);
+
     char output[1024];
-    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output), config);
+    LLMPipelineGenerate(pipeline, prompt, output, sizeof(output),config);
 
     printf("Generated text: %s\n", output);
 
-    LLMPipelineDestroy(pipeline);
-    // Add your code logic here
+    DestroyLLMPipeline(pipeline);
+    DestroyGenerationConfig(config);
 
     return EXIT_SUCCESS;
 }

@@ -1,9 +1,12 @@
+// Copyright (C) 2023-2024 Intel Corporation
+// SPDX-License-Identifier: Apache-2.0
+
 #include "openvino/genai/openvino_genai_c.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 #define MAX_PROMPT_LENGTH 256
-#define MAX_OUTPUT_LENGTH 1024
+#define MAX_OUTPUT_LENGTH 2048
 
 void streamer(const char* word) {
     printf("%s", word);
@@ -19,27 +22,29 @@ int main(int argc, char* argv[]) {
     char prompt[MAX_PROMPT_LENGTH], output[MAX_OUTPUT_LENGTH];
     const char* models_path = argv[1];
     const char* device = "CPU";  // GPU, NPU can be used as well
-    LLMPipelineHandle pipeline = CreateLLMPipeline(models_path, "CPU");
+    LLMPipelineHandle* pipeline = CreateLLMPipeline(models_path, "CPU");
     if (pipeline == NULL) {
         fprintf(stderr, "Failed to create LLM pipeline\n");
         return EXIT_FAILURE;
     }
 
-    GenerationConfigHandle config = CreateGenerationConfig();
-    GenerationConfig_SetMaxNewTokens(config, 100);
-    //printf("get max new tokens %llu\n", GenerationConfig_GetMaxNewTokens(config));
+    GenerationConfigHandle* config = CreateGenerationConfig();
+    GenerationConfigSetMaxNewTokens(config, 100);
 
     LLMPipelineStartChat(pipeline);
     printf("question:\n");
     while (fgets(prompt, MAX_PROMPT_LENGTH, stdin)) {
         prompt[strcspn(prompt, "\n")] = 0;
 
-        LLMPipelineGenerate(pipeline, prompt, output, sizeof(output),config);
+        LLMPipelineGenerate(pipeline, prompt, output, sizeof(output), config);
         streamer(output);
 
         printf("\n----------\nquestion:\n");
     }
-    LLMPipelineStartChat(pipeline);
+    LLMPipelineFinishChat(pipeline);
+
+    DestroyLLMPipeline(pipeline);
+    DestroyGenerationConfig(config);
 
     return EXIT_SUCCESS;
 }

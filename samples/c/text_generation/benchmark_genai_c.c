@@ -1,14 +1,14 @@
 // Copyright (C) 2023-2025 Intel Corporation
 // SPDX-License-Identifier: Apache-2.0
 
-#include "openvino/genai/genai_c_api.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_PROMPT_LENGTH      256
-#define MAX_OUTPUT_LENGTH      1024
+#include "openvino/genai/openvino_genai_c.h"
 
+#define MAX_PROMPT_LENGTH 256
+#define MAX_OUTPUT_LENGTH 1024
 
 #define DEFAULT_PROMPT         "The Sky is blue because"
 #define DEFAULT_NUM_WARMUP     1
@@ -82,18 +82,18 @@ int parse_arguments(int argc, char* argv[], Options* options) {
             }
         } else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             print_usage();
-            return 0;  // 用户请求帮助，退出程序
+            return 0;
         } else {
             printf("Error: Unknown option %s\n", argv[i]);
             return -1;
         }
     }
-    return 1;  // 参数解析成功
+    return 1;
 }
 
 int main(int argc, char* argv[]) {
-
-     Options options = {.model = NULL,
+    printf("This is a C API example for OpenVINO GenAI.\n");
+    Options options = {.model = NULL,
                        .prompt = DEFAULT_PROMPT,
                        .num_warmup = DEFAULT_NUM_WARMUP,
                        .num_iter = DEFAULT_NUM_ITER,
@@ -102,12 +102,11 @@ int main(int argc, char* argv[]) {
 
     int result = parse_arguments(argc, argv, &options);
     if (result == 0) {
-        return EXIT_SUCCESS;  // 用户请求帮助，退出程序
+        return EXIT_SUCCESS; 
     } else if (result == -1) {
-        return EXIT_FAILURE;  // 参数解析失败
+        return EXIT_FAILURE;  
     }
 
-    // 输出解析的结果
     printf("Model: %s\n", options.model ? options.model : "Not specified");
     printf("Prompt: %s\n", options.prompt);
     printf("Num Warmup: %zu\n", options.num_warmup);
@@ -117,14 +116,42 @@ int main(int argc, char* argv[]) {
 
     char output[MAX_OUTPUT_LENGTH];
 
-    LLMPipelineHandle pipe = CreateLLMPipeline(options.model, options.device);
+    LLMPipelineHandle* pipe = CreateLLMPipeline(options.model, options.device);
 
-    GenerationConfigHandle config = CreateGenerationConfig();
+    GenerationConfigHandle* config = CreateGenerationConfig();
+    GenerationConfigSetMaxNewTokens(config, options.max_new_tokens);
+
     for (size_t i = 0; i < options.num_warmup; i++)
-        LLMPipelineGenerate(pipe, options.prompt, output,MAX_OUTPUT_LENGTH, config);
+        LLMPipelineGenerate(pipe, options.prompt, output, MAX_OUTPUT_LENGTH, config);
 
     LLMPipelineGenerate(pipe, options.prompt, output, MAX_OUTPUT_LENGTH, config);
 
+    DecodedResultsHandle* results =CreateDecodedResults();
+    LLMPipelineGenerateDecodeResults(pipe, options.prompt, results, config);
 
+    PerfMetricsHandle* metrics = CreatePerfMetrics();
+    DecodedeResultsGetPerfMetrics(results, metrics);
+
+    for (size_t i = 0; i < options.num_iter - 1; i++) {
+        LLMPipelineGenerateDecodeResults(pipe, options.prompt, results, config);
+        PerfMetricsHandle* _metrics = CreatePerfMetrics();
+        DecodedeResultsGetPerfMetrics(results, _metrics);
+        AddPerfMetricsInPlace(metrics, _metrics);
+        DestoryPerfMetics(_metrics); 
+    }
+
+    printf("%.2f ms\n", PerfMetricsGetLoadTime(metrics));
+    printf("Generate time: %.2f ± %.2f ms\n",PerfMetricsGetGenerateDuration(metrics).mean, PerfMetricsGetGenerateDuration(metrics).std);
+    printf("Tokenization time: %.2f ± %.2f ms\n",PerfMetricsGetTokenizationDuration(metrics).mean,PerfMetricsGetTokenizationDuration(metrics).std);
+    printf("Detokenization time: %.2f ± %.2f ms\n",PerfMetricsGetDetokenizationDuration(metrics).mean,PerfMetricsGetDetokenizationDuration(metrics).std);
+    printf("TTFT: %.2f ± %.2f ms\n", PerfMetricsGetTtft(metrics).mean, PerfMetricsGetTtft(metrics).std);
+    printf("TPOT: %.2f ± %.2f ms/token\n", PerfMetricsGetTpot(metrics).mean, PerfMetricsGetTpot(metrics).std);
+    printf("Throughput: %.2f ± %.2f tokens/s\n",PerfMetricsGetThroughput(metrics).mean,PerfMetricsGetThroughput(metrics).std);
+
+    // Release Resources
+    DestroyLLMPipeline(pipe);
+    DestroyGenerationConfig(config);
+    DestroyDecodedResults(results);
+    DestoryPerfMetics(metrics);
     return EXIT_SUCCESS;
 }

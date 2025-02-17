@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "c_wrapper/perf_metrics_c.h" 
 #include "c_wrapper/generation_config_c.h"
 #include "c_wrapper/llm_pipeline_c.h"
 

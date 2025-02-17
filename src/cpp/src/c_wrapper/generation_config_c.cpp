@@ -1,4 +1,5 @@
 #include "openvino/genai/generation_config.hpp"
+#include "common_c.hpp"
 #include "openvino/genai/c_wrapper/generation_config_c.h"
 
 
@@ -6,249 +7,220 @@
 OPENVINO_EXTERN_C {
 #endif
 
-    GenerationConfigHandle CreateGenerationConfig() {
-        return static_cast<GenerationConfigHandle>(new ov::genai::GenerationConfig());
+    GenerationConfigHandle* CreateGenerationConfig() {
+        GenerationConfigHandle* config = new GenerationConfigHandle;
+        config->object = std::make_shared<ov::genai::GenerationConfig>();
+        return config;
     }
-    GenerationConfigHandle CreateGenerationConfigFromJson(const char* json_path) {
-        return static_cast<GenerationConfigHandle>(new ov::genai::GenerationConfig(json_path));
+    GenerationConfigHandle* CreateGenerationConfigFromJson(const char* json_path) {
+        if (json_path) {
+            GenerationConfigHandle* config = new GenerationConfigHandle;
+            config->object = std::make_shared<ov::genai::GenerationConfig>(std::filesystem::path(json_path));
+            return config;
+        }
+        return NULL;
     }
-    void DestroyGenerationConfig(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
+    void DestroyGenerationConfig(GenerationConfigHandle* config) {
+        if (config) {
             delete config;
         }
     }
 
     // Generic
-    void GenerationConfig_SetMaxNewTokens(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->max_new_tokens = value;
+    void GenerationConfigSetMaxNewTokens(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->max_new_tokens = value;
         }
     }
-    void GenerationConfig_SetMaxLength(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->max_length = value;
+    void GenerationConfigSetMaxLength(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->max_length = value;
         }
     }
-    void GenerationConfig_SetIgnoreEOS(GenerationConfigHandle handle, bool value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->ignore_eos = value;
+    void GenerationConfigSetIgnoreEOS(GenerationConfigHandle* config, bool value) {
+        if (config) {
+            config->object->ignore_eos = value;
         }
     }
-    void GenerationConfig_SetMinNewTokens(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->min_new_tokens = value;
+    void GenerationConfigSetMinNewTokens(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->min_new_tokens = value;
         }
     }
-    void GenerationConfig_SetEcho(GenerationConfigHandle handle, bool value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->echo = value;
+    void GenerationConfigSetEcho(GenerationConfigHandle* config, bool value) {
+        if (config) {
+            config->object->echo = value;
         }
     }
-    void GenerationConfig_SetLogProbs(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->logprobs = value;
+    void GenerationConfigSetLogProbs(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->logprobs = value;
         }
     }
 
-    void GenerationConfig_SetIncludeStopStrInOutput(GenerationConfigHandle handle, bool value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->include_stop_str_in_output = value;
+    void GenerationConfigSetIncludeStopStrInOutput(GenerationConfigHandle* config, bool value) {
+        if (config) {
+            config->object->include_stop_str_in_output = value;
         }
     }
-    void GenerationConfig_SetStopStrings(GenerationConfigHandle handle, const char* strings[], size_t count) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            std::set<std::string> stop_strings;
+    void GenerationConfigSetStopStrings(GenerationConfigHandle* config, const char* strings[], size_t count) {
+        if (config) {
+            std::set<std::string> stopStrings;
             for (size_t i = 0; i < count; i++) {
-                stop_strings.insert(strings[i]);
+                stopStrings.insert(strings[i]);
             }
-            config->stop_strings = stop_strings;
+            config->object->stop_strings = stopStrings;
         }
     }
-    void GenerationConfig_SetStopTokenIds(GenerationConfigHandle handle, int64_t * token_ids, size_t token_ids_num) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
+    void GenerationConfigSetStopTokenIds(GenerationConfigHandle* config, int64_t * token_ids, size_t token_ids_num) {
+        if (config) {
             std::set<int64_t> stop_token_ids;
             for (size_t i = 0; i < token_ids_num; i++) {
                 stop_token_ids.insert(token_ids[i]);
             }
-            config->stop_token_ids = stop_token_ids;
+            config->object->stop_token_ids = stop_token_ids;
         }
     }
     // Beam Search
-    void GenerationConfig_SetNumBeamGroups(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->num_beam_groups = value;
+    void GenerationConfigSetNumBeamGroups(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->num_beam_groups = value;
         }
     }
-    void GenerationConfig_SetNumBeams(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->num_beams = value;
+    void GenerationConfigSetNumBeams(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->num_beams = value;
         }
     }
-    void GenerationConfig_SetDiversityPenalty(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->diversity_penalty = value;
+    void GenerationConfigSetDiversityPenalty(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->diversity_penalty = value;
         }
     }
-    void GenerationConfig_SetLengthPenalty(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->length_penalty = value;
+    void GenerationConfigSetLengthPenalty(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->length_penalty = value;
         }
     }
-    void GenerationConfig_SetNumReturnSequences(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->num_return_sequences = value;
+    void GenerationConfigSetNumReturnSequences(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->num_return_sequences = value;
         }
     }
-    void GenerationConfig_SetNoRepeatNgramSize(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->no_repeat_ngram_size = value;
+    void GenerationConfigSetNoRepeatNgramSize(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->no_repeat_ngram_size = value;
         }
     }
 
-    void SetStopCriteria(GenerationConfigHandle handle, StopCriteria value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->stop_criteria = static_cast<ov::genai::StopCriteria>(value);
+    void GenerationConfigSetStopCriteria(GenerationConfigHandle* config, StopCriteria value) {
+        if (config) {
+            config->object->stop_criteria = static_cast<ov::genai::StopCriteria>(value);
         }
     }
 
-    void GenerationConfig_SetTemperature(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->temperature = value;
+    void GenerationConfigSetTemperature(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->temperature = value;
         }
     }
-    void GenerationConfig_SetTopP(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->top_p = value;
+    void GenerationConfigSetTopP(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->top_p = value;
         }
     }
-    void GenerationConfig_SetTopK(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->top_k = value;
+    void GenerationConfigSetTopK(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->top_k = value;
         }
     }
-    void GenerationConfig_SetDoSample(GenerationConfigHandle handle, bool value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->do_sample = value;
+    void GenerationConfigSetDoSample(GenerationConfigHandle* config, bool value) {
+        if (config) {
+            config->object->do_sample = value;
         }
     }
-    void GenerationConfig_SetRepetitionPenalty(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->repetition_penalty = value;
+    void GenerationConfigSetRepetitionPenalty(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->repetition_penalty = value;
         }
     }
-    void GenerationConfig_SetPresencePenalty(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->presence_penalty = value;
+    void GenerationConfigSetPresencePenalty(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->presence_penalty = value;
         }
     }
-    void GenerationConfig_SetFrequencyPenalty(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->frequency_penalty = value;
+    void GenerationConfigSetFrequencyPenalty(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->frequency_penalty = value;
         }
     }
-    void GenerationConfig_SetRngSeed(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->rng_seed = value;
+    void GenerationConfigSetRngSeed(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->rng_seed = value;
         }
     }
 
-    void GenerationConfig_SetAssistantConfidenceThreshold(GenerationConfigHandle handle, float value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->assistant_confidence_threshold = value;
+    void GenerationConfigSetAssistantConfidenceThreshold(GenerationConfigHandle* config, float value) {
+        if (config) {
+            config->object->assistant_confidence_threshold = value;
         }
     }
-    void GenerationConfig_SetNumAssistantTokens(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->num_assistant_tokens = value;
+    void GenerationConfigSetNumAssistantTokens(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->num_assistant_tokens = value;
         }
     }
-    void GenerationConfig_SetMaxNgramSize(GenerationConfigHandle handle, size_t value) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->max_ngram_size = value;
+    void GenerationConfigSetMaxNgramSize(GenerationConfigHandle* config, size_t value) {
+        if (config) {
+            config->object->max_ngram_size = value;
         }
     }
 
-    void GenerationConfig_SetEOSTokenID(GenerationConfigHandle handle, int64_t id) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->eos_token_id = id;
+    void GenerationConfigSetEOSTokenID(GenerationConfigHandle* config, int64_t id) {
+        if (config) {
+            config->object->eos_token_id = id;
         }
     }
 
-    size_t GenerationConfig_GetMaxNewTokens(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->max_new_tokens;
+    size_t GenerationConfigGetMaxNewTokens(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->max_new_tokens;
         }
         return 0;
     }
-    bool GenerationConfig_IsGreedyDecoding(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->is_greedy_decoding();
+    bool GenerationConfigIsGreedyDecoding(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->is_greedy_decoding();
         }
         return false;
     }
-    bool GenerationConfig_IsBeamSearch(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->is_beam_search();
+    bool GenerationConfigIsBeamSearch(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->is_beam_search();
         }
         return false;
     }
-    bool GenerationConfig_IsMultinomial(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->is_multinomial();
+    bool GenerationConfigIsMultinomial(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->is_multinomial();
         }
         return false;
     }
-    bool GenerationConfig_IsAssistingGeneration(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->is_assisting_generation();
+    bool GenerationConfigIsAssistingGeneration(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->is_assisting_generation();
         }
         return false;
     }
-    bool GenerationConfig_IsPromptLookup(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            return config->is_prompt_lookup();
+    bool GenerationConfigIsPromptLookup(GenerationConfigHandle* config) {
+        if (config) {
+            return config->object->is_prompt_lookup();
         }
         return false;
     }
-    void GenerationConfig_Validate(GenerationConfigHandle handle) {
-        if (handle) {
-            ov::genai::GenerationConfig* config = static_cast<ov::genai::GenerationConfig*>(handle);
-            config->validate();
+    void GenerationConfigValidate(GenerationConfigHandle* config) {
+        if (config) {
+            config->object->validate();
         }
     }
 

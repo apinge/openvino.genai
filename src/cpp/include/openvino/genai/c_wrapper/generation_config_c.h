@@ -19,62 +19,63 @@
 OPENVINO_EXTERN_C {
 #endif
 
+#include "stdio.h"
 
 typedef enum { EARLY, HEURISTIC, NEVER } StopCriteria;
-// ov::genai::GenerationConfig
-typedef void* GenerationConfigHandle;
-OPENVINO_GENAI_EXPORTS GenerationConfigHandle CreateGenerationConfig();
-OPENVINO_GENAI_EXPORTS GenerationConfigHandle CreateGenerationConfigFromJson(const char* json_path);
-OPENVINO_GENAI_EXPORTS void DestroyGenerationConfig(GenerationConfigHandle handle);
+typedef struct GenerationConfigOpaque GenerationConfigHandle;
+
+OPENVINO_GENAI_EXPORTS GenerationConfigHandle* CreateGenerationConfig();
+OPENVINO_GENAI_EXPORTS GenerationConfigHandle* CreateGenerationConfigFromJson(const char* json_path);
+OPENVINO_GENAI_EXPORTS void DestroyGenerationConfig(GenerationConfigHandle* handle);
 
 // Generic
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetMaxNewTokens(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetMaxLength(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetIgnoreEOS(GenerationConfigHandle handle, bool value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetMinNewTokens(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetEcho(GenerationConfigHandle handle, bool value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetLogProbs(GenerationConfigHandle handle, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetMaxNewTokens(GenerationConfigHandle* handle, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetMaxLength(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetIgnoreEOS(GenerationConfigHandle* config, bool value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetMinNewTokens(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetEcho(GenerationConfigHandle* config, bool value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetLogProbs(GenerationConfigHandle* config, size_t value);
 
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetStopStrings(GenerationConfigHandle handle,
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetStopStrings(GenerationConfigHandle* config,
                                                             const char* strings[],
                                                             size_t count);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetIncludeStopStrInOutput(GenerationConfigHandle handle, bool value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetStopTokenIds(GenerationConfigHandle handle,
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetIncludeStopStrInOutput(GenerationConfigHandle* config, bool value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetStopTokenIds(GenerationConfigHandle* config,
                                                              int64_t* token_ids,
                                                              size_t token_ids_num);
 
 // Beam Search
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumBeamGroups(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumBeams(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetDiversityPenalty(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetLengthPenalty(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumReturnSequences(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNoRepeatNgramSize(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void SetStopCriteria(GenerationConfigHandle handle, StopCriteria value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetNumBeamGroups(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetNumBeams(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetDiversityPenalty(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetLengthPenalty(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetNumReturnSequences(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetNoRepeatNgramSize(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetStopCriteria(GenerationConfigHandle * config, StopCriteria value);
 
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetTemperature(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetTopP(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetTopK(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetDoSample(GenerationConfigHandle handle, bool value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetRepetitionPenalty(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetPresencePenalty(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetFrequencyPenalty(GenerationConfigHandle handle, float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetRngSeed(GenerationConfigHandle handle, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetTemperature(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetTopP(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetTopK(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetDoSample(GenerationConfigHandle* config, bool value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetRepetitionPenalty(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetPresencePenalty(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetFrequencyPenalty(GenerationConfigHandle* config, float value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetRngSeed(GenerationConfigHandle* config, size_t value);
 
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetAssistantConfidenceThreshold(GenerationConfigHandle handle,
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetAssistantConfidenceThreshold(GenerationConfigHandle* config,
                                                                              float value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetNumAssistantTokens(GenerationConfigHandle handle, size_t value);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetMaxNgramSize(GenerationConfigHandle handle, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetNumAssistantTokens(GenerationConfigHandle* config, size_t value);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetMaxNgramSize(GenerationConfigHandle* config, size_t value);
 
-OPENVINO_GENAI_EXPORTS void GenerationConfig_SetEOSTokenID(GenerationConfigHandle handle, int64_t id);
+OPENVINO_GENAI_EXPORTS void GenerationConfigSetEOSTokenID(GenerationConfigHandle* config, int64_t id);
 
-OPENVINO_GENAI_EXPORTS size_t GenerationConfig_GetMaxNewTokens(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsGreedyDecoding(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsBeamSearch(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsMultinomial(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsAssistingGeneration(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS bool GenerationConfig_IsPromptLookup(GenerationConfigHandle handle);
-OPENVINO_GENAI_EXPORTS void GenerationConfig_Validate(GenerationConfigHandle handle);
+OPENVINO_GENAI_EXPORTS size_t GenerationConfigGetMaxNewTokens(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS bool GenerationConfigIsGreedyDecoding(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS bool GenerationConfigIsBeamSearch(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS bool GenerationConfigIsMultinomial(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS bool GenerationConfigIsAssistingGeneration(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS bool GenerationConfigIsPromptLookup(GenerationConfigHandle* config);
+OPENVINO_GENAI_EXPORTS void GenerationConfigValidate(GenerationConfigHandle* config);
 
 #ifdef __cplusplus
 }
