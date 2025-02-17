@@ -11,32 +11,32 @@ OPENVINO_EXTERN_C {
 #endif
 
     /**
-     * @struct GenerationConfigOpaque
+     * @struct OpaqueGenerationConfig
      * @brief This is an interface of ov::genai::GenerationConfig
      */
-    struct GenerationConfigOpaque {
+    struct OpaqueGenerationConfig {
         std::shared_ptr<ov::genai::GenerationConfig> object;
     };
 
     /**
-     * @struct LLMPipelineOpaque
+     * @struct OpaqueLLMPipeline
      * @brief This is an interface of ov::genai::LLMPipeline
      */
-    struct LLMPipelineOpaque {
+    struct OpaqueLLMPipeline {
         std::shared_ptr<ov::genai::LLMPipeline> object;
     };
     /**
-     * @struct PerfMetricsOpaque
+     * @struct OpaquePerfMetrics
      * @brief This is an interface of ov::genai::PerfMetrics
      */
-    struct PerfMetricsOpaque {
+    struct OpaquePerfMetrics {
         std::shared_ptr<ov::genai::PerfMetrics> object;
     };
     /**
-     * @struct DecodedResultsOpaque
+     * @struct OpaqueDecodedResults
      * @brief This is an interface of ov::genai::DecodedResults
      */
-    struct DecodedResultsOpaque {
+    struct OpaqueDecodedResults {
         std::shared_ptr<ov::genai::DecodedResults> object;
     };
 

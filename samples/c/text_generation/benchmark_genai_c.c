@@ -126,14 +126,13 @@ int main(int argc, char* argv[]) {
 
     LLMPipelineGenerate(pipe, options.prompt, output, MAX_OUTPUT_LENGTH, config);
 
-    DecodedResultsHandle* results = CreateDecodedResults();
-    LLMPipelineGenerateDecodeResults(pipe, options.prompt, results, config);
+    DecodedResultsHandle* results = LLMPipelineGenerateDecodeResults(pipe, options.prompt, config);
 
     PerfMetricsHandle* metrics = CreatePerfMetrics();
     DecodedeResultsGetPerfMetrics(results, metrics);
 
     for (size_t i = 0; i < options.num_iter - 1; i++) {
-        LLMPipelineGenerateDecodeResults(pipe, options.prompt, results, config);
+        results = LLMPipelineGenerateDecodeResults(pipe, options.prompt, config);
         PerfMetricsHandle* _metrics = CreatePerfMetrics();
         DecodedeResultsGetPerfMetrics(results, _metrics);
         AddPerfMetricsInPlace(metrics, _metrics);

@@ -14,14 +14,22 @@
 #ifdef __cplusplus
 OPENVINO_EXTERN_C {
 #endif
-
-    typedef struct DecodedResultsOpaque DecodedResultsHandle;
+    /**
+     * @struct DecodedResultsHandle
+     * @brief type define DecodedResultsHandle from OpaqueDecodedResults
+     */
+    typedef struct OpaqueDecodedResults DecodedResultsHandle;
     OPENVINO_GENAI_EXPORTS DecodedResultsHandle* CreateDecodedResults();
     OPENVINO_GENAI_EXPORTS void DestroyDecodedResults(DecodedResultsHandle * results);
     OPENVINO_GENAI_EXPORTS void DecodedeResultsGetPerfMetrics(DecodedResultsHandle * results,
                                                               PerfMetricsHandle * metrics);
+    OPENVINO_GENAI_EXPORTS void DecodeResultsGetString(DecodedResultsHandle * results, char* output, int max_size);
 
-    typedef struct LLMPipelineOpaque LLMPipelineHandle;
+     /**
+     * @struct LLMPipelineHandle
+     * @brief type define LLMPipelineHandle from OpaqueLLMPipeline
+     */
+    typedef struct OpaqueLLMPipeline LLMPipelineHandle;
     OPENVINO_GENAI_EXPORTS LLMPipelineHandle* CreateLLMPipeline(const char* models_path, const char* device);
     OPENVINO_GENAI_EXPORTS void DestroyLLMPipeline(LLMPipelineHandle * pipe);
     OPENVINO_GENAI_EXPORTS void LLMPipelineGenerate(LLMPipelineHandle * handle,
@@ -29,9 +37,9 @@ OPENVINO_EXTERN_C {
                                                     char* output,
                                                     int max_size,
                                                     GenerationConfigHandle* config);
-    OPENVINO_GENAI_EXPORTS void LLMPipelineGenerateDecodeResults(LLMPipelineHandle * handle,
+
+    OPENVINO_GENAI_EXPORTS DecodedResultsHandle* LLMPipelineGenerateDecodeResults(LLMPipelineHandle * handle,
                                                                  const char* inputs,
-                                                                 DecodedResultsHandle* results,
                                                                  GenerationConfigHandle* config);
     OPENVINO_GENAI_EXPORTS void LLMPipelineStartChat(LLMPipelineHandle * pipe);
     OPENVINO_GENAI_EXPORTS void LLMPipelineFinishChat(LLMPipelineHandle * pipe);
@@ -39,7 +47,7 @@ OPENVINO_EXTERN_C {
     OPENVINO_GENAI_EXPORTS GenerationConfigHandle* LLMPipelineGetGeneratonConfig(LLMPipelineHandle * pipe);
     OPENVINO_GENAI_EXPORTS void LLMPipelineSetGeneratonConfig(LLMPipelineHandle * pipe,
                                                               GenerationConfigHandle * config);
-
+    //TODO: Add C wrapper for class EncodedResults and LLMPipeline::generation with Streamer.
 #ifdef __cplusplus
 }
 #endif

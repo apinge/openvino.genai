@@ -22,11 +22,17 @@ OPENVINO_EXTERN_C {
         }
     }
     void DecodedeResultsGetPerfMetrics(DecodedResultsHandle * results, PerfMetricsHandle * metrics) {
-        if (results && metrics) {
+        if (results && metrics && results->object && metrics->object) {
             metrics->object = std::make_shared<ov::genai::PerfMetrics>(results->object->perf_metrics);
         }
     }
-
+    void DecodeResultsGetString(DecodedResultsHandle* results, char* output, int max_size) {
+        if (results && results->object && output) {
+            std::string str = *(results->object);
+            strncpy(output, str.c_str(), max_size - 1);
+            output[max_size - 1] = '\0';
+        }
+    }
     LLMPipelineHandle* CreateLLMPipeline(const char* models_path, const char* device) {
         LLMPipelineHandle* pipe = new LLMPipelineHandle;
         pipe->object =
@@ -44,11 +50,11 @@ OPENVINO_EXTERN_C {
                              char* output,
                              int max_size,
                              GenerationConfigHandle* config) {
-        if (pipe) {
+        if (pipe && pipe->object && output) {
             std::string input_str(inputs);
             ov::genai::StringInputs input = {input_str};
             std::string results;
-            if (config) {
+            if (config && config->object) {
                 results = pipe->object->generate(input, *(config->object));
             } else {
                 results = pipe->object->generate(input);
@@ -57,32 +63,35 @@ OPENVINO_EXTERN_C {
             output[max_size - 1] = '\0';
         }
     }
-    void LLMPipelineGenerateDecodeResults(LLMPipelineHandle * pipe,
+    DecodedResultsHandle* LLMPipelineGenerateDecodeResults(LLMPipelineHandle * pipe,
                                           const char* inputs,
-                                          DecodedResultsHandle* results,
                                           GenerationConfigHandle* config) {
-        if (pipe) {
+        if (pipe && pipe->object) {
             std::string input_str(inputs);
             ov::genai::StringInputs input = {input_str};
-            if (config) {
-                *results->object = pipe->object->generate(input, *(config->object));
+            
+            DecodedResultsHandle* results = CreateDecodedResults();
+            if (config && config->object) {
+                *(results->object) = pipe->object->generate(input, *(config->object));
             } else {
-                *results->object = pipe->object->generate(input);
+                *(results->object) = pipe->object->generate(input);
             }
+            return results;
         }
+        return NULL;
     }
     void LLMPipelineStartChat(LLMPipelineHandle * pipe) {
-        if (pipe) {
+        if (pipe && pipe->object) {
             pipe->object->start_chat();
         }
     }
     void LLMPipelineFinishChat(LLMPipelineHandle * pipe) {
-        if (pipe) {
+        if (pipe && pipe->object) {
             pipe->object->finish_chat();
         }
     }
     GenerationConfigHandle* LLMPipelineGetGeneratonConfig(LLMPipelineHandle * pipe) {
-        if (pipe) {
+        if (pipe && pipe->object) {
             GenerationConfigHandle* config = new GenerationConfigHandle;
             config->object = std::make_shared<ov::genai::GenerationConfig>(pipe->object->get_generation_config());
             return config;
@@ -90,7 +99,7 @@ OPENVINO_EXTERN_C {
         return NULL;
     }
     void LLMPipelineSetGeneratonConfig(LLMPipelineHandle * pipe, GenerationConfigHandle * config) {
-        if (pipe && config) {
+        if (pipe && config && pipe->object && config->object) {
             pipe->object->set_generation_config(*(config->object));
         }
     }

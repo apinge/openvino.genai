@@ -22,7 +22,11 @@ OPENVINO_EXTERN_C {
 #include "stdio.h"
 
     typedef enum { EARLY, HEURISTIC, NEVER } StopCriteria;
-    typedef struct GenerationConfigOpaque GenerationConfigHandle;
+    /**
+     * @struct GenerationConfigHandle
+     * @brief type define GenerationConfigHandle from OpaqueGenerationConfig
+     */
+    typedef struct OpaqueGenerationConfig GenerationConfigHandle;
 
     OPENVINO_GENAI_EXPORTS GenerationConfigHandle* CreateGenerationConfig();
     OPENVINO_GENAI_EXPORTS GenerationConfigHandle* CreateGenerationConfigFromJson(const char* json_path);

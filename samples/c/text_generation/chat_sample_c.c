@@ -6,8 +6,8 @@
 
 #include "openvino/genai/openvino_genai_c.h"
 
-#define MAX_PROMPT_LENGTH 256
-#define MAX_OUTPUT_LENGTH 2048
+#define MAX_PROMPT_LENGTH 64
+#define MAX_OUTPUT_LENGTH 256
 
 void streamer(const char* word) {
     printf("%s", word);

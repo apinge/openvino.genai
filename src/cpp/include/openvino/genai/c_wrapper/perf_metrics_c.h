@@ -20,8 +20,11 @@ OPENVINO_EXTERN_C {
         float mean;
         float std;
     } MeanStdPair_C;
-
-    typedef struct PerfMetricsOpaque PerfMetricsHandle;
+    /**
+     * @struct PerfMetricsHandle
+     * @brief type define PerfMetricsHandle from OpaquePerfMetrics
+     */
+    typedef struct OpaquePerfMetrics PerfMetricsHandle;
 
     OPENVINO_GENAI_EXPORTS PerfMetricsHandle* CreatePerfMetrics();
     OPENVINO_GENAI_EXPORTS void DestoryPerfMetics(PerfMetricsHandle * metrics);
@@ -38,7 +41,7 @@ OPENVINO_EXTERN_C {
     OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetTokenizationDuration(const PerfMetricsHandle* metrics);
     OPENVINO_GENAI_EXPORTS MeanStdPair_C PerfMetricsGetDetokenizationDuration(const PerfMetricsHandle* metrics);
 
-    // PerfMetrics& operator+=(const PerfMetrics& right);
+    // C interface for PerfMetrics& operator+=(const PerfMetrics& right);
     OPENVINO_GENAI_EXPORTS void AddPerfMetricsInPlace(PerfMetricsHandle * left, const PerfMetricsHandle* right);
 
 #ifdef __cplusplus
